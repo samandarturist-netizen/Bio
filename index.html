@@ -3,243 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Samandar Tishlikov | Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>Samandar Tishlikov | eDEX Terminal</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         :root {
-            --accent: #00ff41; 
+            --neon-green: #00ff41;
             --bg-dark: #000000;
-            --card-bg: #0d1117;
-            --text-gray: #8b949e;
+            --terminal-gray: #1a1a1a;
+            --text-dim: #8b949e;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'VT323', monospace; }
 
         body {
             background-color: var(--bg-dark);
-            color: #ffffff;
-            font-family: 'Space Grotesk', sans-serif;
-            overflow: hidden; /* Kirishda qotib turishi uchun */
+            color: var(--neon-green);
             height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            user-select: none;
         }
 
-        /* Fon effekti */
-        .bg-grid {
+        /* Fon effekti chiziqlari */
+        .bg-lines {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
-            background-size: 30px 30px;
+            background-image: linear-gradient(0deg, transparent 95%, rgba(0, 255, 65, 0.05) 96%),
+                              linear-gradient(90deg, transparent 95%, rgba(0, 255, 65, 0.05) 96%);
+            background-size: 50px 50px;
+            z-index: -2;
+        }
+
+        /* 1. INTERFEYS LAYOUTI (Rasm kabi joylashgan grafiklar) */
+        .edex-layout {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
+            pointer-events: none;
         }
 
-        /* 1. KIRISH TUGMASI */
-        #welcome-screen {
-            text-align: center;
-            z-index: 100;
-            transition: 0.8s ease-in-out;
-        }
-
-        .main-btn {
-            padding: 20px 40px;
-            background: transparent;
-            color: var(--accent);
-            border: 2px solid var(--accent);
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            letter-spacing: 2px;
+        .panel {
+            position: absolute;
+            background: rgba(10, 10, 10, 0.7);
+            border: 1px solid rgba(0, 255, 65, 0.3);
             border-radius: 5px;
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+            padding: 10px;
+            font-size: 14px;
+            overflow: hidden;
+        }
+
+        /* Yuqori chap: Soat va Tizim */
+        .panel-top-left { top: 15px; left: 15px; width: 25%; height: 20%; }
+        /* Yuqori o'ng: Kiber globus (grafik o'rniga matn) */
+        .panel-top-right { top: 15px; right: 15px; width: 20%; height: 35%; text-align: center; }
+        /* Pastki: Klaviatura */
+        .panel-bottom { bottom: 15px; left: 15%; width: 70%; height: 25%; }
+        /* Chap: Tarmoq */
+        .panel-left { top: 25%; left: 15px; width: 20%; height: 50%; }
+
+        /* Oqayotgan kod effekti */
+        .code-stream { color: rgba(0, 255, 65, 0.1); font-size: 10px; }
+
+        /* 2. O'RTADAGI KIRISH TUGMASI */
+        #welcome-overlay {
+            text-align: center;
+            z-index: 10;
+            transition: 1.2s;
+        }
+
+        .cyber-btn {
+            background: transparent;
+            color: var(--neon-green);
+            border: 2px solid var(--neon-green);
+            padding: 20px 40px;
+            font-size: 22px;
+            cursor: pointer;
+            letter-spacing: 3px;
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
             transition: 0.3s;
             text-transform: uppercase;
         }
 
-        .main-btn:hover {
-            background: var(--accent);
-            color: #000;
-            box-shadow: 0 0 30px var(--accent);
+        .cyber-btn:hover {
+            background: rgba(0, 255, 65, 0.2);
+            box-shadow: 0 0 40px var(--neon-green);
         }
 
-        /* 2. ASOSIY KONTENT (Yashirin holatda) */
-        #content-screen {
+        /* 3. ASOSIY MA'LUMOTLAR OYNASI (Terminal o'rtasida) */
+        #data-window {
             display: none;
-            width: 100%;
-            max-width: 480px;
-            height: 90vh;
-            overflow-y: auto;
+            width: 90%; max-width: 500px;
+            height: 70vh;
+            background: var(--terminal-gray);
+            border: 2px solid var(--neon-green);
+            border-radius: 8px;
+            position: absolute;
+            z-index: 100;
             padding: 20px;
             opacity: 0;
-            transform: translateY(20px);
-            transition: 0.8s ease-out;
+            transform: scale(0.8);
+            transition: 1s cubic-bezier(0.19, 1, 0.22, 1);
+            overflow-y: auto;
+        }
+
+        /* Terminal sarlavhasi */
+        .term-header {
+            border-bottom: 1px solid var(--neon-green);
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
         }
 
         /* Til Tanlash */
-        .lang-switch {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+        .lang-group { display: flex; gap: 8px; margin-bottom: 15px; }
+        .lang-btn { background: #000; border: 1px solid var(--text-dim); color: #fff; padding: 4px 8px; font-size: 14px; border-radius: 3px; cursor: pointer; }
+        .lang-btn.active { border-color: var(--neon-green); color: var(--neon-green); }
 
-        .lang-btn {
-            padding: 5px 12px;
-            background: #161b22;
-            border: 1px solid #30363d;
-            color: #fff;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 12px;
-        }
+        /* Ma'lumot bloklari */
+        .data-block { margin-bottom: 15px; }
+        .data-label { color: var(--text-dim); font-size: 14px; text-transform: uppercase; }
+        .data-val { color: #fff; font-size: 18px; font-weight: bold; }
+        .data-icon { font-size: 20px; margin-right: 10px; color: var(--neon-green); }
 
-        .lang-btn.active { border-color: var(--accent); color: var(--accent); }
-
-        /* Kartochkalar */
-        .profile-card {
-            background: var(--card-bg);
-            border: 1px solid #30363d;
-            border-radius: 24px;
-            padding: 25px;
-            text-align: center;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .avatar {
-            width: 120px; height: 120px;
-            border-radius: 20%;
-            border: 2px solid var(--accent);
-            padding: 5px;
-            object-fit: cover;
-            margin-bottom: 15px;
-        }
-
-        .section-title { font-size: 16px; color: var(--accent); margin: 20px 0 10px; text-transform: uppercase; border-left: 3px solid var(--accent); padding-left: 10px; }
-
-        .card {
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 15px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-
-        .icon { font-size: 20px; min-width: 30px; }
-        .card-info h3 { font-size: 10px; color: var(--text-gray); text-transform: uppercase; }
-        .card-info p { font-size: 14px; font-weight: 500; }
-
-        .social-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .s-btn { padding: 12px; border-radius: 10px; text-align: center; text-decoration: none; color: #fff; font-weight: bold; font-size: 13px; background: #238636; }
-
-    </style>
-</head>
-<body>
-
-<div class="bg-grid"></div>
-
-<div id="welcome-screen">
-    <button class="main-btn" onclick="showContent()">Ma'lumotlarni ko'rish</button>
-</div>
-
-<div id="content-screen">
-    <div class="lang-switch">
-        <button class="lang-btn active" onclick="changeLang('uz')">UZB</button>
-        <button class="lang-btn" onclick="changeLang('ru')">РУС</button>
-        <button class="lang-btn" onclick="changeLang('en')">ENG</button>
-    </div>
-
-    <div class="profile-card">
-        <img src="https://raw.githubusercontent.com/samandarturist-netizen/Bio/main/1000004961.png" class="avatar">
-        <h1 id="name">Samandar Tishlikov</h1>
-        <p class="role" id="role">TDTU | Turizm va Mehmondostlik</p>
-    </div>
-
-    <h2 class="section-title" id="sec-info">Ma'lumotlar</h2>
-    
-    <div class="card">
-        <div class="icon">🎓</div>
-        <div class="card-info"><h3 id="label-edu">O'qish</h3><p id="val-edu">Transport universiteti, 2-kurs (3 yillik)</p></div>
-    </div>
-
-    <div class="card">
-        <div class="icon">📍</div>
-        <div class="card-info"><h3 id="label-loc">Manzil</h3><p id="val-loc">Yakkasaroy tumani (Asli Sayxunobod)</p></div>
-    </div>
-
-    <h2 class="section-title" id="sec-hobbies">Qiziqishlar</h2>
-    <div class="card">
-        <div class="icon">⚡</div>
-        <div class="card-info"><p id="val-hobbies">Sayohat, Futbol, IT sohalari</p></div>
-    </div>
-
-    <h2 class="section-title" id="sec-contact">Aloqa</h2>
-    <div class="social-btns">
-        <a href="https://t.me/Shavkatov_cs26" class="s-btn" style="background: #24A1DE;">TELEGRAM</a>
-        <a href="https://instagram.com/samandar__o00" class="s-btn" style="background: #E4405F;">INSTAGRAM</a>
-    </div>
-    <a href="tel:+998995007826" class="s-btn" style="display: block; margin-top: 10px; background: var(--accent); color: #000;">QO'NG'IROQ</a>
-</div>
-
-<script>
-    function showContent() {
-        document.getElementById('welcome-screen').style.display = 'none';
-        const content = document.getElementById('content-screen');
-        content.style.display = 'block';
-        setTimeout(() => {
-            content.style.opacity = '1';
-            content.style.transform = 'translateY(0)';
-            document.body.style.overflow = 'auto';
-        }, 100);
-    }
-
-    const data = {
-        uz: {
-            role: "TDTU | Turizm va Mehmondostlik",
-            secInfo: "Ma'lumotlar",
-            edu: "O'qish", eduVal: "Transport universiteti, 2-kurs (3 yillik)",
-            loc: "Manzil", locVal: "Yakkasaroy tumani (Asli Sayxunobod)",
-            hobbies: "Qiziqishlar", hobbiesVal: "Sayohat, Futbol, IT sohalari",
-            contact: "Aloqa"
-        },
-        ru: {
-            role: "ТГТУ | Туризм и Гостеприимство",
-            secInfo: "Информация",
-            edu: "Учеба", eduVal: "Транспортный университет, 2-курс (3 года)",
-            loc: "Адрес", locVal: "Яккасарайский район (Родом из Сайхунабада)",
-            hobbies: "Интересы", hobbiesVal: "Путешествия, Футбол, ИТ-сферы",
-            contact: "Контакты"
-        },
-        en: {
-            role: "TSTU | Tourism and Hospitality",
-            secInfo: "Information",
-            edu: "Education", eduVal: "Transport University, 2nd year (3-year program)",
-            loc: "Location", locVal: "Yakkasaray district (From Saykhunobod)",
-            hobbies: "Interests", hobbiesVal: "Travel, Football, IT spheres",
-            contact: "Contact"
-        }
-    };
-
-    function changeLang(lang) {
-        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
-        
-        document.getElementById('role').innerText = data[lang].role;
-        document.getElementById('sec-info').innerText = data[lang].secInfo;
-        document.getElementById('label-edu').innerText = data[lang].edu;
-        document.getElementById('val-edu').innerText = data[lang].eduVal;
-        document.getElementById('label-loc').innerText = data[lang].loc;
-        document.getElementById('val-loc').innerText = data[lang].locVal;
-        document.getElementById('sec-hobbies').innerText = data[lang].hobbies;
-        document.getElementById('val-hobbies').innerText = data[lang].hobbiesVal;
-        document.getElementById('sec-contact').innerText = data[lang].contact;
-    }
-</script>
-
-</body>
-</html>
+        /* Tugmalar */
+        .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
