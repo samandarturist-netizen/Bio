@@ -3,350 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eDEX Terminal | Samandar Tishlikov</title>
+    <title>eDEX-UI | Samandar Netizen</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --neon-green: #00ff41;
-            --neon-blue: #00e5ff;
-            --terminal-gray: #1a1a1a;
-            --text-gray: #8b949e;
+            --cyan: #00d4ff;
+            --dark-cyan: rgba(0, 212, 255, 0.2);
+            --bg: #000b14;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'VT323', monospace; cursor: crosshair; }
 
         body {
-            background-color: #000;
-            color: var(--neon-green);
-            font-family: 'VT323', monospace;
+            background-color: var(--bg);
+            color: var(--cyan);
             height: 100vh;
-            overflow: hidden;
-            background-image: radial-gradient(circle, #001f00 0%, #000 100%);
-        }
-
-        /* 1. KIBER-MONITOR SCANLINES VA GRID EFFEKTI */
-        body::before {
-            content: " ";
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 4px, 3px 100%;
-            z-index: 10000; pointer-events: none;
-        }
-
-        .cyber-grid {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
-            z-index: -1;
-        }
-
-        /* 2. DYNAMIK FON Panellari (Rasmga mos joylashgan grafiklar) */
-        .cyber-panel {
-            position: absolute;
-            background: rgba(10, 10, 10, 0.8);
-            border: 1px solid rgba(0, 255, 65, 0.3);
-            border-radius: 5px;
-            padding: 10px;
-            font-size: 14px;
-            backdrop-filter: blur(5px);
-            transition: 0.3s ease;
-        }
-
-        .panel-top-left { top: 15px; left: 15px; width: 280px; height: 180px; }
-        .panel-top-right { top: 15px; right: 15px; width: 220px; height: 320px; text-align: center; }
-        .panel-bottom-left { bottom: 15px; left: 15px; width: 250px; height: 200px; }
-        .panel-bottom-right { bottom: 15px; right: 15px; width: 300px; height: 250px; }
-        .panel-left-side { top: 210px; left: 15px; width: 150px; height: 400px; }
-
-        /* Grafik animatsiyasi */
-        .chart-visual {
-            width: 100%; height: 70px;
-            background: repeating-linear-gradient(90deg, transparent, transparent 10px, var(--neon-green) 11px);
-            opacity: 0.4;
-            animation: moveChart 4s linear infinite;
-        }
-        @keyframes moveChart { from { background-position: 0 0; } to { background-position: 200px 0; } }
-
-        /* Oqayotgan kod effekti (marquee o'rniga dinamik matn) */
-        .code-log-stream { color: #006600; font-size: 11px; overflow: hidden; height: 150px; margin-top: 10px; }
-
-        /* 3. MARKAZIY KIRISH (AUTH GATE) */
-        #authentication-gate {
-            text-align: center;
-            z-index: 10001;
-            transition: 1s ease;
-        }
-
-        .hex-start-btn {
-            background: transparent;
-            color: var(--neon-green);
-            border: 3px solid var(--neon-green);
-            padding: 30px 60px;
-            font-size: 30px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            position: relative;
-            clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
-            transition: 0.4s ease;
-        }
-
-        .hex-start-btn:hover {
-            background: rgba(0, 255, 65, 0.2);
-            box-shadow: 0 0 50px var(--neon-green);
-            transform: scale(1.05);
-        }
-
-        /* 4. MURAKKAB ASOSIY TERMINAL OYNASI */
-        #terminal-window {
-            display: none;
-            width: 95%; max-width: 900px;
-            height: 85vh;
-            background: rgba(5, 5, 5, 0.98);
-            border: 1px solid var(--neon-green);
-            border-radius: 8px;
-            position: absolute;
-            z-index: 10002;
             display: grid;
-            grid-template-columns: 290px 1fr;
-            padding: 2px;
-            opacity: 0;
-            transform: scale(0.9) translateY(40px);
-            transition: 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+            grid-template-columns: 300px 1fr 300px;
+            grid-template-rows: 80px 1fr 280px;
+            gap: 10px;
+            padding: 10px;
             overflow: hidden;
+            text-transform: uppercase;
         }
 
-        .term-side-bar {
-            border-right: 1px solid rgba(0, 255, 65, 0.4);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
+        /* SCANLINE EFFECT */
+        body::after {
+            content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 3px, 3px 100%; z-index: 100; pointer-events: none;
         }
 
-        .term-content-area {
-            padding: 25px;
-            overflow-y: auto;
-            position: relative;
-        }
+        .panel { border: 1px solid var(--cyan); background: rgba(0, 20, 30, 0.4); padding: 10px; position: relative; }
+        .header-text { font-size: 12px; color: var(--cyan); border-bottom: 1px solid var(--cyan); margin-bottom: 5px; display: flex; justify-content: space-between; }
 
-        /* Burchak bezaklari */
-        .term-corner { position: absolute; width: 16px; height: 16px; border: 2px solid var(--neon-green); }
-        .tl { top: -6px; left: -6px; border-right: none; border-bottom: none; }
-        .tr { top: -6px; right: -6px; border-left: none; border-bottom: none; }
-        .bl { bottom: -6px; left: -6px; border-right: none; border-top: none; }
-        .br { bottom: -6px; right: -6px; border-left: none; border-top: none; }
+        /* TOP SECTION */
+        .top-info { grid-column: 1 / 2; }
+        .top-main { grid-column: 2 / 3; border-bottom: 2px solid var(--cyan); display: flex; align-items: center; justify-content: center; font-size: 24px; letter-spacing: 5px; }
+        .top-status { grid-column: 3 / 4; }
 
-        .profile-image-container {
-            width: 170px; height: 170px;
-            border: 1px solid var(--neon-green);
-            padding: 4px;
-            position: relative;
-            margin-bottom: 20px;
-        }
-        .profile-image-container img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            filter: grayscale(80%) contrast(110%) brightness(1.1);
-        }
+        /* LEFT SIDE: FILESYSTEM */
+        .filesystem { grid-row: 2 / 4; }
+        .file-item { display: flex; justify-content: space-between; font-size: 14px; padding: 3px 0; border-bottom: 1px solid rgba(0, 212, 255, 0.1); }
+        .file-item:hover { background: var(--dark-cyan); }
 
-        /* Bo'limlar */
-        .info-section {
-            border: 1px solid rgba(0, 255, 65, 0.2);
-            margin-bottom: 20px;
-            padding: 15px;
-            background: rgba(0, 255, 65, 0.02);
-            border-left: 4px solid var(--neon-blue);
-        }
+        /* MAIN TERMINAL */
+        .main-display { grid-column: 2 / 3; grid-row: 2 / 3; display: flex; flex-direction: column; padding: 20px; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .info-box { border-left: 3px solid var(--cyan); padding-left: 15px; }
+        .info-label { color: var(--text-gray); font-size: 14px; opacity: 0.7; }
+        .info-value { font-size: 20px; color: #fff; text-shadow: 0 0 10px var(--cyan); }
 
-        .section-header-title { font-size: 16px; color: var(--neon-blue); text-transform: uppercase; margin-bottom: 12px; border-bottom: 1px solid rgba(0, 212, 255, 0.2); padding-bottom: 5px; }
+        /* RIGHT SIDE: NETWORK & GLOBE */
+        .network { grid-row: 2 / 3; }
+        .globe { height: 150px; border: 1px solid var(--cyan); margin-top: 10px; display: flex; align-items: center; justify-content: center; font-size: 50px; animation: rotate 10s linear infinite; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        .data-row-entry { display: flex; justify-content: space-between; margin-bottom: 10px; }
-        .data-label-tag { color: var(--text-gray); font-size: 14px; text-transform: uppercase; }
-        .data-value-tag { color: #fff; font-size: 19px; font-weight: bold; }
-        .data-icon { font-size: 20px; margin-right: 12px; color: var(--neon-green); }
+        /* BOTTOM: KEYBOARD (Rasmda ko'rsatilganidek) */
+        .keyboard-area { grid-column: 2 / 4; grid-row: 3 / 4; display: flex; flex-direction: column; }
+        .keys-row { display: flex; gap: 4px; margin-bottom: 4px; flex-wrap: wrap; }
+        .key { border: 1px solid var(--cyan); padding: 8px 12px; font-size: 12px; flex-grow: 1; text-align: center; background: rgba(0, 0, 0, 0.5); }
+        .key:hover { background: var(--cyan); color: #000; }
 
-        /* Tillar VA ALOQA */
-        .language-matrix { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid rgba(0, 255, 65, 0.3); padding-bottom: 10px; }
-        .l-matrix-btn { background: #000; border: 1px solid var(--text-gray); color: #fff; padding: 5px 12px; cursor: pointer; border-radius: 4px; font-size: 14px; }
-        .l-matrix-btn.active { border-color: var(--neon-green); color: var(--neon-green); }
-
-        .social-links-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 25px; }
-        .social-matrix-btn {
-            padding: 15px; border-radius: 6px;
-            text-align: center; text-decoration: none;
-            font-weight: bold; font-size: 15px;
-            transition: 0.3s ease;
-        }
+        /* AVATAR */
+        .avatar-circle { width: 80px; height: 80px; border: 1px solid var(--cyan); border-radius: 50%; overflow: hidden; margin-bottom: 10px; }
+        .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
 
     </style>
 </head>
 <body>
 
-<div class="cyber-grid"></div>
-
-<div class="cyber-panel panel-top-left">
-    <div>[TIZIM STATUSI: ONLINE]</div>
-    <div id="live-clock" style="font-size: 36px; color: #fff;">00:00:00</div>
-    <div class="chart-visual"></div>
-    <div style="font-size: 11px; margin-top: 5px;">CPU_USAGE: 24% // NETIZEN_OS v4.1</div>
-</div>
-
-<div class="cyber-panel panel-top-right">
-    <div>GLOBUS_CONNECTION_MAP</div>
-    <div style="text-align: center; font-size: 60px; margin: 20px 0;">💠</div>
-    <div style="font-size: 12px;">CONNECTED -> SIRDARYO_Sayxunobod<br>HUB -> TASHKENT_Yakkasaroy</div>
-</div>
-
-<div class="cyber-panel panel-left-side">
-    <div style="font-size: 12px;">
-        > USER_FOUND<br>> LOADING_BIO_V4<br>> DECRYPTING...<br>> INDEX.HTML<br>> asset/1000004961<br>
-        ==========<br>
-        10101010101<br>01010101010<br>11001100110<br>00110011001
+    <div class="panel top-info">
+        <div class="header-text"><span>SYSTEM_TIME</span><span>UTC+5</span></div>
+        <div id="clock" style="font-size: 30px; text-align: center;">00:00:00</div>
+        <div style="font-size: 10px; margin-top: 5px;">UPTIME: 02:44:12:09<br>LOAD: 14% 08% 11%</div>
     </div>
-</div>
 
-<div class="cyber-panel panel-bottom-left">
-    <div>LOG_STREAM // GITHUB.COM</div>
-    <div class="code-log-stream" id="github-logs">
-        > Fetching samandarturist-netizen/Bio...<br>
-        > Initializing index.html...<br>
-        > Connection stable.<br>
-        > User found.<br>
-        > ACCESS_GRANTED<br>
-        > wait
+    <div class="panel top-main">
+        SAMANDAR_NETIZEN // TERMINAL v2.2.8
     </div>
-</div>
 
-<div id="authentication-gate">
-    <div style="font-size: 15px; margin-bottom: 25px; letter-spacing: 15px; color: rgba(0, 255, 65, 0.7);">NETIZEN_DATABASE_V4</div>
-    <button class="hex-start-btn" onclick="openBioTerminal()">ACCESS_DATA</button>
-</div>
+    <div class="panel top-status">
+        <div class="header-text"><span>NETWORK_STATUS</span><span>ONLINE</span></div>
+        <div style="font-size: 12px;">IP: 213.230.101.44<br>PING: 19ms<br>DL: 45.2 MB/S</div>
+    </div>
 
-<div id="terminal-window" style="display: none;">
-    <div class="term-side-bar">
-        <div class="term-corner tl"></div><div class="term-corner tr"></div>
-        <div class="term-corner bl"></div><div class="term-corner br"></div>
-        
-        <div class="profile-image-container">
-            <img src="https://raw.githubusercontent.com/samandarturist-netizen/Bio/main/1000004961.png" alt="Samandar">
-        </div>
-        
-        <h1 style="color: #fff; font-size: 26px; font-family: 'Space Grotesk', sans-serif; font-weight: 700;">T. SAMANDAR</h1>
-        <div style="color: var(--neon-green); font-size: 15px; margin-top: 5px;">@Shavkatov_cs26</div>
-        
-        <div style="margin-top: 40px; width: 100%; font-size: 13px; text-align: left;">
-            <div>SEC_STATUS: #########-- [90%]</div>
-            <div style="height: 5px; background: #111; margin-top: 5px;">
-                <div style="width: 90%; height: 100%; background: var(--neon-green);"></div>
-            </div>
-            <div style="margin-top: 15px;">NETIZEN_ID: SN-V4-2606</div>
+    <div class="panel filesystem">
+        <div class="header-text"><span>FILESYSTEM</span><span>/home/samandar</span></div>
+        <div class="file-item"><span>..</span><span>FOLDER</span></div>
+        <div class="file-item" style="color: #fff;"><span>> BIOGRAPHY.sh</span><span>1.2KB</span></div>
+        <div class="file-item"><span>.configs</span><span>FOLDER</span></div>
+        <div class="file-item"><span>education.log</span><span>456B</span></div>
+        <div class="file-item"><span>location.map</span><span>12KB</span></div>
+        <div class="file-item"><span>instagram.lnk</span><span>120B</span></div>
+        <div class="file-item"><span>telegram.lnk</span><span>120B</span></div>
+        <div style="margin-top: 20px; font-size: 11px; color: var(--cyan); opacity: 0.5;">
+            [MOUNT] /dev/sda1<br>
+            [SPACE] 45.2GB / 128GB
         </div>
     </div>
 
-    <div class="term-content-area">
-        <div class="language-matrix">
-            <button class="l-matrix-btn active" onclick="setLang('uz')">UZB</button>
-            <button class="l-matrix-btn" onclick="setLang('ru')">РУС</button>
-            <button class="l-matrix-btn" onclick="setLang('en')">ENG</button>
-            <span style="margin-left: auto; cursor: pointer; color: var(--text-gray);" onclick="location.reload()">[LOGOUT]</span>
-        </div>
-
-        <div class="info-section">
-            <h2 class="section-header-title" id="sec-address">Manzil Ma'lumotlari</h2>
-            <div class="data-row-entry">
-                <span class="data-label-tag" id="label-residence">Hozirgi yashash joyi:</span>
-                <span class="data-value-tag">Toshkent shahar, Yakkasaroy tumani</span>
+    <div class="panel main-display">
+        <div style="display: flex; gap: 20px; align-items: center; border-bottom: 1px solid var(--cyan); padding-bottom: 15px;">
+            <div class="avatar-circle">
+                <img src="https://raw.githubusercontent.com/samandarturist-netizen/Bio/main/1000004961.png">
             </div>
-            <div class="data-row-entry">
-                <span class="data-label-tag" id="label-origin">Asl kelib chiqishi:</span>
-                <span class="data-value-tag">Sirdaryo v., Sayxunobod t.</span>
+            <div>
+                <div style="font-size: 24px; color: #fff;">USER: SAMANDAR TISHLIKOV</div>
+                <div style="color: var(--cyan);">ROLE: JR CYBERSECURITY SPECIALIST</div>
             </div>
         </div>
 
-        <div class="info-section">
-            <h2 class="section-header-title" id="sec-education">Ta'lim Tizimi</h2>
-            <div class="data-row-entry">
-                <span class="data-label-tag" id="label-uni">Universitet:</span>
-                <span class="data-value-tag">TDTU (Transport Universiteti)</span>
+        <div class="stats-grid">
+            <div class="info-box">
+                <div class="info-label">Joriy Manzil</div>
+                <div class="info-value">Toshkent sh., Yakkasaroy t.</div>
             </div>
-            <div class="data-row-entry">
-                <span class="data-label-tag" id="label-degree">Bosqich:</span>
-                <span class="data-value-tag">2-kurs (3 yillik dastur)</span>
+            <div class="info-box" style="border-color: #f0f;">
+                <div class="info-label">Kelib chiqishi</div>
+                <div class="info-value">Sirdaryo, Sayxunobod</div>
             </div>
-            <div class="data-row-entry">
-                <span class="data-label-tag" id="label-field">Yo'nalish:</span>
-                <span class="data-value-tag">Turizm va Mehmondostlik</span>
+            <div class="info-box">
+                <div class="info-label">Ta'lim Maskani</div>
+                <div class="info-value">TDTU (Transport Univ.)</div>
+            </div>
+            <div class="info-box">
+                <div class="info-label">O'qish Bosqichi</div>
+                <div class="info-value">2-kurs (3 yillik)</div>
             </div>
         </div>
 
-        <div class="info-section">
-            <h2 class="section-header-title" id="sec-interests">Qiziqishlar</h2>
-            <div class="data-value-tag" style="font-size: 16px;">> Sayohat // Futbol // Kiberxavfsizlik // IT</div>
-        </div>
-
-        <div class="social-links-row">
-            <a href="https://t.me/Shavkatov_cs26" target="_blank" class="social-matrix-btn" style="background: #24A1DE; color: white;">TELEGRAM_CMD</a>
-            <a href="https://instagram.com/samandar__o00" target="_blank" class="social-matrix-btn" style="background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); color: white;">INSTAGRAM_CMD</a>
+        <div style="margin-top: 30px; font-size: 14px; background: rgba(0,0,0,0.4); padding: 10px; border: 1px dashed var(--cyan);">
+            > bash run_bio.sh<br>
+            > Loading location data... [OK]<br>
+            > Initializing social_links... [OK]<br>
+            > Welcome back, Netizen.
         </div>
     </div>
-</div>
 
-<script>
-    // Live Soatni yangilash
-    function updateClock() {
-        document.getElementById('live-clock').innerText = new Date().toLocaleTimeString();
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
+    <div class="panel network">
+        <div class="header-text"><span>WORLD_VIEW</span><span>MAP_v4</span></div>
+        <div class="globe">🌐</div>
+        <div style="margin-top: 15px; font-size: 12px;">
+            SIRDARYO_NODE: ACTIVE<br>
+            TASHKENT_HUB: STABLE<br>
+            GITHUB_PAGES: CONNECTED
+        </div>
+        <div style="margin-top: 15px;">
+            <a href="https://t.me/Shavkatov_cs26" style="color: #fff; text-decoration: none; display: block; border: 1px solid var(--cyan); padding: 5px; text-align: center; margin-bottom: 5px;">OPEN_TELEGRAM</a>
+            <a href="https://instagram.com/samandar__o00" style="color: #fff; text-decoration: none; display: block; border: 1px solid var(--cyan); padding: 5px; text-align: center;">OPEN_INSTAGRAM</a>
+        </div>
+    </div>
 
-    function openBioTerminal() {
-        document.getElementById('authentication-gate').style.display = 'none';
-        const terminal = document.getElementById('terminal-window');
-        terminal.style.display = 'grid';
-        setTimeout(() => {
-            terminal.style.opacity = '1';
-            terminal.style.transform = 'scale(1) translateY(0)';
-        }, 100);
-    }
+    <div class="panel keyboard-area">
+        <div class="header-text"><span>VIRTUAL_INPUT_DEVICE</span><span>HID_COMPLIANT</span></div>
+        <div class="keys-row">
+            <div class="key">ESC</div><div class="key">1</div><div class="key">2</div><div class="key">3</div><div class="key">4</div><div class="key">5</div><div class="key">6</div><div class="key">7</div><div class="key">8</div><div class="key">9</div><div class="key">0</div><div class="key">BACK</div>
+        </div>
+        <div class="keys-row">
+            <div class="key" style="flex-grow: 2;">TAB</div><div class="key">Q</div><div class="key">W</div><div class="key">E</div><div class="key">R</div><div class="key">T</div><div class="key">Y</div><div class="key">U</div><div class="key">I</div><div class="key">O</div><div class="key">P</div><div class="key">ENTER</div>
+        </div>
+        <div class="keys-row">
+            <div class="key" style="flex-grow: 3;">CAPS</div><div class="key">A</div><div class="key">S</div><div class="key">D</div><div class="key">F</div><div class="key">G</div><div class="key">H</div><div class="key">J</div><div class="key">K</div><div class="key">L</div><div class="key" style="flex-grow: 3;">SHIFT</div>
+        </div>
+        <div class="keys-row">
+            <div class="key">CTRL</div><div class="key">FN</div><div class="key">ALT</div><div class="key" style="flex-grow: 10;">SPACEBAR</div><div class="key">ALT GR</div><div class="key">CTRL</div>
+        </div>
+    </div>
 
-    // 3 tilda tarjimalar
-    const data = {
-        uz: {
-            secAddr: "Manzil Ma'lumotlari", labelRes: "Hozirgi yashash joyi:", labelOri: "Asl kelib chiqishi:",
-            secEdu: "Ta'lim Tizimi", labelUni: "Universitet:", labelDeg: "Bosqich:", labelFie: "Yo'nalish:",
-            secInt: "Qiziqishlar"
-        },
-        ru: {
-            secAddr: "Данные адреса", labelRes: "Место жительства:", labelOri: "Происхождение:",
-            secEdu: "Система образования", labelUni: "Университет:", labelDeg: "Курс:", labelFie: "Направление:",
-            secInt: "Интересы"
-        },
-        en: {
-            secAddr: "Location Data", labelRes: "Current Residence:", labelOri: "Origin:",
-            secEdu: "Education System", labelUni: "University:", labelDeg: "Year:", labelFie: "Field:",
-            secInt: "Interests"
+    <script>
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString('en-GB');
         }
-    };
-
-    function setLang(lang) {
-        document.querySelectorAll('.l-matrix-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
-        
-        document.getElementById('sec-address').innerText = data[lang].secAddr;
-        document.getElementById('label-residence').innerText = data[lang].labelRes;
-        document.getElementById('label-origin').innerText = data[lang].labelOri;
-        document.getElementById('sec-education').innerText = data[lang].secEdu;
-        document.getElementById('label-uni').innerText = data[lang].labelUni;
-        document.getElementById('label-degree').innerText = data[lang].labelDeg;
-        document.getElementById('label-field').innerText = data[lang].labelFie;
-        document.getElementById('sec-interests').innerText = data[lang].secInt;
-    }
-</script>
-
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
 </body>
 </html>
