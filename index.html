@@ -3,86 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Samandar Tishlikov | Portfolio</title>
+    <title>Samandar Tishlikov | eDex Portfolio</title>
     <style>
-        * { margin: 0; padding: 0; box-box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b0e14; color: #e6edf3; display: flex; justify-content: center; padding: 20px; }
-        
-        .container { width: 100%; max-width: 400px; background: #161b22; border-radius: 24px; padding: 20px; border: 1px solid #30363d; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+        :root {
+            --neon-green: #00ff41;
+            --dark-bg: #050a0e;
+            --card-bg: #0d1117;
+            --border-color: #30363d;
+        }
 
-        /* Profil qismi */
-        .header { text-align: center; margin-bottom: 25px; }
-        .profile-img { width: 110px; height: 110px; border-radius: 50%; border: 3px solid #238636; padding: 5px; margin-bottom: 10px; }
-        h1 { font-size: 22px; margin-bottom: 5px; color: #ffffff; }
-        .subtitle { color: #8b949e; font-size: 14px; margin-bottom: 15px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
 
-        /* Menyu qismi */
-        .menu-list { list-style: none; }
-        .menu-item { 
-            background: #21262d; 
-            margin-bottom: 12px; 
-            border-radius: 15px; 
-            border: 1px solid #30363d;
-            transition: 0.3s;
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .edex-container {
+            width: 100%;
+            max-width: 450px;
+            background: var(--card-bg);
+            border: 2px solid var(--neon-green);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 2px solid var(--neon-green);
+            padding: 5px;
+            box-shadow: 0 0 15px var(--neon-green);
+        }
+
+        h1 { font-size: 20px; margin-top: 15px; letter-spacing: 2px; color: var(--neon-green); text-transform: uppercase; }
+        .status { font-size: 12px; color: #8b949e; margin-top: 5px; }
+
+        .menu-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .menu-item {
+            background: rgba(48, 54, 61, 0.3);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
-            padding: 15px;
             text-decoration: none;
             color: #c9d1d9;
+            transition: 0.3s;
         }
-        .menu-item:active { transform: scale(0.97); background: #30363d; }
-        .icon { font-size: 20px; margin-right: 15px; }
-        .text { font-size: 16px; font-weight: 500; }
 
-        /* Tugmalar */
-        .social-btn {
-            display: block;
+        .menu-item:hover {
+            border-color: var(--neon-green);
+            background: rgba(0, 255, 65, 0.05);
+            transform: translateX(5px);
+        }
+
+        .icon { font-size: 22px; margin-right: 15px; filter: drop-shadow(0 0 5px var(--neon-green)); }
+        .label { font-size: 11px; color: var(--neon-green); text-transform: uppercase; display: block; }
+        .val { font-size: 14px; font-weight: bold; }
+
+        .social-links {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
             text-align: center;
-            padding: 15px;
-            border-radius: 15px;
+            padding: 12px;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: bold;
-            margin-top: 10px;
-            color: white;
-            background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);
+            font-size: 13px;
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            transition: 0.3s;
+        }
+
+        .btn:hover { background: var(--neon-green); color: black; box-shadow: 0 0 20px var(--neon-green); }
+
+        /* Scanning line effect */
+        .scanline {
+            width: 100%;
+            height: 2px;
+            background: rgba(0, 255, 65, 0.1);
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: scan 4s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="edex-container">
+    <div class="scanline"></div>
+    
     <div class="header">
-        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="profile-img">
+        <img src="https://avatars.githubusercontent.com/u/167888804?v=4" class="profile-img">
         <h1>Tishlikov Samandar</h1>
-        <p class="subtitle">🎓 Transport Universiteti Talabasi</p>
+        <p class="status">SYSTEM_STATUS: ACTIVE // TALABA</p>
     </div>
 
-    <div class="menu-list">
-        <a href="#" class="menu-item">
-            <span class="icon">🏠</span>
-            <span class="text">Bosh sahifa</span>
-        </a>
-        <a href="#" class="menu-item">
+    <div class="menu-grid">
+        <div class="menu-item">
             <span class="icon">👤</span>
-            <span class="text">Haqimda</span>
-        </a>
-        <a href="#" class="menu-item">
+            <div>
+                <span class="label">F.I.SH</span>
+                <span class="val">Samandar Shavkat o'g'li</span>
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <span class="icon">📅</span>
+            <div>
+                <span class="label">Tug'ilgan sana</span>
+                <span class="val">26.06.2005 (21 yosh)</span>
+            </div>
+        </div>
+
+        <div class="menu-item">
             <span class="icon">🎓</span>
-            <span class="text">Ta'lim</span>
-        </a>
-        <a href="#" class="menu-item">
+            <div>
+                <span class="label">O'qish joyi</span>
+                <span class="val">TDTU | 2-bosqich talabasi</span>
+            </div>
+        </div>
+
+        <div class="menu-item">
             <span class="icon">📍</span>
-            <span class="text">Manzil: Yakkasaroy</span>
-        </a>
-        <a href="tel:+998995007826" class="menu-item">
-            <span class="icon">📞</span>
-            <span class="text">Bog'lanish</span>
-        </a>
+            <div>
+                <span class="label">Hozirgi manzil</span>
+                <span class="val">Toshkent, Yakkasaroy</span>
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <span class="icon">🏠</span>
+            <div>
+                <span class="label">Doimiy manzil</span>
+                <span class="val">Sirdaryo, Sayxunobod</span>
+            </div>
+        </div>
     </div>
 
-    <a href="https://instagram.com/samandar__o00" class="social-btn">Instagram @samandar__o00</a>
+    <div class="social-links">
+        <a href="https://instagram.com/samandar__o00" class="btn">INSTAGRAM</a>
+        <a href="tel:+998995007826" class="btn">BOG'LANISH</a>
+    </div>
 </div>
 
 </body>
 </html>
-
