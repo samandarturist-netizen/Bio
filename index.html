@@ -131,3 +131,149 @@
 
         /* Tugmalar */
         .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .data-btn {
+            text-align: center; padding: 12px;
+            border-radius: 5px; text-decoration: none;
+            font-weight: bold; font-size: 16px;
+            transition: 0.3s;
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-lines"></div>
+
+<div class="edex-layout">
+    <div class="panel panel-top-left">
+        <div>[SYSTEM_STATUS: ONLINE]</div>
+        <div id="term-clock"></div>
+        <div class="code-stream">> load avg: 0.12<br>> disk: 50Gb free<br>> cpu: 2%<br>> > netizen_init<br>> index.html<br>> BIO [CODESPACES]</div>
+    </div>
+    <div class="panel panel-top-right">
+        <div>NETIZEN_HUB v3.1</div>
+        <div style="font-size: 40px;">🌐</div>
+        <div style="font-size: 12px; margin-top: 10px;">LAT: 41.2995<br>LON: 69.2401</div>
+    </div>
+    <div class="panel panel-left">
+        <div>TRAFFIC_ANALYSIS</div>
+        <div style="margin-top: 20px; font-size: 12px;">> git push origin main<br>> git commit -m "Update Bio"<br>> git add index.html<br>> > edex_ready<br>> wait<br>> done</div>
+    </div>
+    <div class="panel panel-bottom">
+        <div>INTERFACE_CONTROL</div>
+        <div style="font-size: 12px; margin-top: 10px;">Q W E R T Y U I O P<br>A S D F G H J K L<br>Z X C V B N M [ENTER]</div>
+    </div>
+</div>
+
+<div id="welcome-overlay">
+    <button class="cyber-btn" onclick="activateTerminal()">MA'LUMOTLARNI KO'RISH</button>
+</div>
+
+<div id="data-window">
+    <div class="term-header">
+        <div>> NETIZEN_PROFILE_VIEWER</div>
+        <div style="cursor: pointer;" onclick="closeTerminal()">[X]</div>
+    </div>
+
+    <div class="lang-group">
+        <button class="lang-btn active" onclick="changeLang('uz')">UZB</button>
+        <button class="lang-btn" onclick="changeLang('ru')">РУС</button>
+        <button class="lang-btn" onclick="changeLang('en')">ENG</button>
+    </div>
+
+    <div class="data-block" style="text-align: center; border-bottom: 1px solid rgba(0,255,65,0.2); padding-bottom: 15px;">
+        <img src="https://raw.githubusercontent.com/samandarturist-netizen/Bio/main/1000004961.png" style="width: 130px; height: 130px; border-radius: 50%; border: 2px solid var(--neon-green); object-fit: cover;">
+        <h1 style="font-size: 24px; color: #fff; margin-top: 10px;">Tishlikov Samandar</h1>
+        <p class="role" id="role" style="color: var(--neon-green); font-size: 14px;">TDTU // Turizm va Mehmondostlik</p>
+    </div>
+
+    <div class="data-block">
+        <div class="data-label" id="lbl-edu">O'qish yo'li</div>
+        <div class="data-val" id="val-edu"><span class="data-icon">🎓</span> Transport Universiteti | 2-kurs talabasi (3 yillik)</div>
+    </div>
+
+    <div class="data-block">
+        <div class="data-label" id="lbl-loc">Doimiy manzil</div>
+        <div class="data-val" id="val-loc"><span class="data-icon">🏠</span> Sirdaryo, Sayxunobod (Hozir: Yakkasaroy)</div>
+    </div>
+
+    <div class="data-block">
+        <div class="data-label" id="lbl-hobbies">Qiziqishlar</div>
+        <div class="data-val" id="val-hobbies"><span class="data-icon">⚡</span> Sayohat, Futbol, IT sohalari</div>
+    </div>
+
+    <div class="btn-row">
+        <a href="https://t.me/Shavkatov_cs26" target="_blank" class="data-btn" style="background: #24A1DE; color: white;">TELEGRAM</a>
+        <a href="https://instagram.com/samandar__o00" target="_blank" class="data-btn" style="background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); color: white;">INSTAGRAM</a>
+    </div>
+
+    <p style="text-align: center; color: var(--text-dim); font-size: 10px; margin-top: 20px;">[© 2026 eDEX // SAMANDAR_BIO_HUB]</p>
+</div>
+
+<script>
+    // Soatni yangilash
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('term-clock').innerText = "> " + now.toLocaleTimeString('uz-UZ');
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function activateTerminal() {
+        document.getElementById('welcome-overlay').style.display = 'none';
+        const win = document.getElementById('data-window');
+        win.style.display = 'block';
+        setTimeout(() => {
+            win.style.opacity = '1';
+            win.style.transform = 'scale(1)';
+        }, 100);
+    }
+
+    function closeTerminal() {
+        const win = document.getElementById('data-window');
+        win.style.opacity = '0';
+        win.style.transform = 'scale(0.8)';
+        setTimeout(() => {
+            win.style.display = 'none';
+            document.getElementById('welcome-overlay').style.display = 'block';
+        }, 1000);
+    }
+
+    // 3 Tilda ma'lumotlar
+    const data = {
+        uz: {
+            role: "TDTU // Turizm va Mehmondostlik",
+            lblEdu: "O'qish yo'li", eduVal: "🎓 Transport Universiteti | 2-kurs talabasi (3 yillik)",
+            lblLoc: "Doimiy manzil", locVal: "🏠 Sirdaryo, Sayxunobod (Hozir: Yakkasaroy)",
+            lblHobbies: "Qiziqishlar", hobbiesVal: "⚡ Sayohat, Futbol, IT sohalari"
+        },
+        ru: {
+            role: "ТГТУ // Туризм и Гостеприимство",
+            lblEdu: "Учеба", eduVal: "🎓 Транспортный Университет | 2-курс (3 года)",
+            lblLoc: "Адрес", locVal: "🏠 Сырдарья, Сайхунабад (Сейчас: Яккасарай)",
+            lblHobbies: "Интересы", hobbiesVal: "⚡ Путешествия, Футбол, ИТ-сферы"
+        },
+        en: {
+            role: "TSTU // Tourism and Hospitality",
+            lblEdu: "Education", eduVal: "🎓 Transport University | 2nd-year student (3 years)",
+            lblLoc: "Location", locVal: "🏠 Saykhunobod, Sirdaryo (Now: Yakkasaray)",
+            lblHobbies: "Interests", hobbiesVal: "⚡ Travel, Football, IT spheres"
+        }
+    };
+
+    function changeLang(lang) {
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        document.getElementById('role').innerText = data[lang].role;
+        document.getElementById('lbl-edu').innerText = data[lang].lblEdu;
+        document.getElementById('val-edu').innerText = data[lang].eduVal;
+        document.getElementById('lbl-loc').innerText = data[lang].lblLoc;
+        document.getElementById('val-loc').innerText = data[lang].locVal;
+        document.getElementById('lbl-hobbies').innerText = data[lang].lblHobbies;
+        document.getElementById('val-hobbies').innerText = data[lang].hobbiesVal;
+    }
+</script>
+
+</body>
+</html>
+
